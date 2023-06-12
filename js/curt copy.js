@@ -21,9 +21,6 @@ const plusFullPrice = (curentPrice) => {
   return (price += curentPrice);
 };
 
-const multiplItem =(curentPrice, amount) => {
-  return ( curentPrice*=amount );
-};
 const minusFullPrice = (curentPrice) => {
   return (price -= curentPrice);
 };
@@ -67,7 +64,7 @@ const initialState = () => {
 };
 initialState();
 
-const generateProduct = (id, imgSrc, imgAlt, title, price) => {
+const generateProduct = (id, imgSrc, imgAlt, title, priceNumber) => {
   return `
  <div class="basket__item" data-id="${id}">
     <img class="basket__item-img" src="${imgSrc}" alt="${imgAlt}" />
@@ -82,7 +79,7 @@ const generateProduct = (id, imgSrc, imgAlt, title, price) => {
               <span class="item-action__value">-25%</span>
               <span class="item-action__old-price">37 990₽</span>
             </p>
-            <p class="basket__item-price">${normalPrice(price)} ₽</p>
+            <p class="basket__item-price">${normalPrice(priceNumber)} ₽</p>
     
             <div class="item__color">
               <span class="item__title">Цвет:</span>
@@ -127,20 +124,20 @@ btnAdd.forEach((el) => {
 
     /* Проверка наличия товара в корзине  */
     const itemInCurt = productsList.querySelector(`[data-id="${id}"]`);
+    
     const addItem = (value) => {
       if (itemInCurt) {
         let amountProd = itemInCurt.querySelector(".amount-value");
-/*         let priceItem = parseInt(priceWithoutSpace(itemInCurt.querySelector(".basket__item-price").innerText));
-        console.log(priceItem)
-        priceItem += priceItem;
-        printFullPrice(); */
-        amountProd.innerText = ++amountProd.innerText;
-        
+        amountProd.innerText = ++amountProd.innerText ;
       } else {
         productsList.insertAdjacentHTML(
           "beforeend",
           generateProduct(id, imgSrc, imgAlt, title, priceNumber)
-        );
+        );      
+      };
+      if (itemInCurt){
+            let priceProd = itemInCurt.querySelector('.basket__item-price');
+            priceProd.textContent = `${normalPrice (priceNumber * itemInCurt.querySelector(".amount-value").innerText)} ₽`;
       };
     };
     addItem();
@@ -163,4 +160,6 @@ productsList.addEventListener("click", (e) => {
     printAmount();
     updateStorage();
   }
+
+  /* подсчет стоймости */ 
 });
